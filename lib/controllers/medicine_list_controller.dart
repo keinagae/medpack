@@ -3,7 +3,7 @@ import 'package:medpack/data/modals/medicine_tile.dart';
 import 'package:medpack/data/providers/medicine.dart';
 
 class MedicineListController extends GetxController{
-  var medicines=[].obs;
+  var medicines=<MedicineTile>[].obs;
   MedicineProvider provider=MedicineProvider();
   @override
   void onInit() {
