@@ -5,15 +5,19 @@ import 'package:fluttericon/linearicons_free_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:get/get.dart';
 import 'package:medpack/constants/routes.dart';
+import 'package:medpack/controllers/cart_controller.dart';
 import 'package:medpack/controllers/medicine_list_controller.dart';
+import 'package:medpack/controllers/products_controller.dart';
 import 'package:medpack/data/modals/medicine_tile.dart';
+import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/pages/medicine_detail_page.dart';
 import 'package:medpack/widgets/cards.dart';
 import 'package:medpack/widgets/hero.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
-  final controller=Get.put(MedicineListController());
+  final controller = Get.put(ProductsController());
+  final cartController = Get.put(CartController());
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,7 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -45,30 +49,34 @@ class HomePage extends StatelessWidget {
               ),
             ),
             MDPCard(
-              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                      padding: const EdgeInsets.symmetric(vertical:10),
-                      child: Text("Looking for medicine",style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 24),)
-                  ),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "Looking for medicine",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4!
+                            .copyWith(fontSize: 24),
+                      )),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical:10),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextField(
                       decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        // isCollapsed: true,
+                          filled: true,
+                          fillColor: Colors.white,
+                          // isCollapsed: true,
                           isDense: true,
-                        hintText: "Search",
-                        contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none
-                        ),
-                        prefixIcon: Icon(Entypo.search)
-                      ),
+                          hintText: "Search",
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none),
+                          prefixIcon: Icon(Entypo.search)),
                     ),
                   )
                 ],
@@ -76,11 +84,12 @@ class HomePage extends StatelessWidget {
             ),
             Flexible(
                 flex: 1,
-                child: Obx(()=>ListView.separated(
-                    itemBuilder: (ctx,index)=>MedicineListCard(medicine: controller.medicines[index],),
-                    separatorBuilder: (ctx,index)=>Container(),
-                    itemCount: controller.medicines.length
-                )))
+                child: Obx(() => ListView.separated(
+                    itemBuilder: (ctx, index) => ProductListCard(
+                          product: controller.products[index],
+                        ),
+                    separatorBuilder: (ctx, index) => Container(),
+                    itemCount: controller.products.length)))
           ],
         ),
       ),
@@ -89,17 +98,29 @@ class HomePage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            TextButton(onPressed: (){
-              Get.toNamed(AppRoutes.login);
-            }, child: Icon(Entypo.user),style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor.withOpacity(.2))
-            ),),
-            TextButton(onPressed: (){}, child: Icon(Entypo.home),style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor.withOpacity(.2))
-            ),),
-            TextButton(onPressed: (){}, child: Icon(Entypo.list),style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor.withOpacity(.2))
-            ),)
+            TextButton(
+              onPressed: () {
+                Get.toNamed(AppRoutes.account);
+              },
+              child: Icon(Entypo.user),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Theme.of(context).primaryColor.withOpacity(.2))),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: Icon(Entypo.home),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Theme.of(context).primaryColor.withOpacity(.2))),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: Icon(Entypo.list),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Theme.of(context).primaryColor.withOpacity(.2))),
+            )
           ],
         ),
       ),
@@ -107,16 +128,16 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class MedicineListCard extends StatelessWidget {
-  final MedicineTile medicine;
-  MedicineListCard({Key? key,required this.medicine}) : super(key: key);
+class ProductListCard extends StatelessWidget {
+  final Product product;
+  ProductListCard({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MDPLightCard(
       child: ListTile(
-        onTap: (){
-          Get.toNamed(AppRoutes.detail,arguments: {"medicine":medicine});
+        onTap: () {
+          Get.toNamed(AppRoutes.detail, arguments: {"medicine": product});
         },
         leading: Container(
           height: 50,
@@ -129,41 +150,42 @@ class MedicineListCard extends StatelessWidget {
                 //box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
                 BoxShadow(
                     color: Color.fromRGBO(17, 17, 26, .05),
-                    offset: Offset(0,4),
-                    blurRadius: 16
-                ),
+                    offset: Offset(0, 4),
+                    blurRadius: 16),
                 BoxShadow(
                     color: Color.fromRGBO(17, 17, 26, .05),
-                    offset: Offset(0,8),
-                    blurRadius: 32
-                )
-              ]
-          ),
+                    offset: Offset(0, 8),
+                    blurRadius: 32)
+              ]),
           child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: MDPHero(
-                  tag: "medicine_image_${medicine.id}",child: Image.network(medicine.image??"",fit: BoxFit.cover,))
-          ),
+                  tag: "medicine_image_${product.id}",
+                  child: Image.network(
+                    product.image ?? "",
+                    fit: BoxFit.cover,
+                  ))),
         ),
-
         title: MDPHero(
-          tag: "medicine_title_${medicine.id}",
+          tag: "medicine_title_${product.id}",
           color: Theme.of(context).canvasColor,
-          child: Text(medicine.title??""),
+          child: Text(product.name ?? ""),
         ),
         subtitle: MDPHero(
-
-          tag: "medicine_description_${medicine.id}",
+          tag: "medicine_description_${product.id}",
           child: Container(
-            constraints: BoxConstraints(
-                maxHeight: 100
+            constraints: BoxConstraints(maxHeight: 100),
+            child: Text(
+              product.description ?? "",
+              overflow: TextOverflow.ellipsis,
             ),
-            child: Text(medicine.description??"",overflow: TextOverflow.ellipsis,),
           ),
         ),
-        trailing: TextButton(onPressed: () {  },child: Icon(Entypo.bag),),
+        trailing: TextButton(
+          onPressed: () {},
+          child: Icon(Entypo.bag),
+        ),
       ),
     );
   }
 }
-

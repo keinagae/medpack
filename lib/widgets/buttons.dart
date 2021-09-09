@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:get/get.dart';
 
-
 class MDPBackButton extends StatelessWidget {
   const MDPBackButton({Key? key}) : super(key: key);
 
@@ -15,9 +14,7 @@ class MDPBackButton extends StatelessWidget {
         child: TextButton(
             style: ButtonStyle(
               backgroundColor:
-              MaterialStateProperty.all(
-                  Theme.of(context)
-                      .canvasColor),
+                  MaterialStateProperty.all(Theme.of(context).canvasColor),
             ),
             onPressed: () {
               Get.back();
@@ -28,7 +25,23 @@ class MDPBackButton extends StatelessWidget {
   }
 }
 
+class RectIconButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+  RectIconButton({Key? key, required this.icon, required this.onPressed})
+      : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 40,
+      child: TextButton(
+        onPressed: onPressed,
+        child: Icon(icon),
+      ),
+    );
+  }
+}
 
 class DetailAddToCartButton extends StatelessWidget {
   const DetailAddToCartButton({Key? key}) : super(key: key);
@@ -49,16 +62,14 @@ class DetailAddToCartButton extends StatelessWidget {
       ),
       style: ButtonStyle(
           elevation: MaterialStateProperty.all<double>(0),
-          foregroundColor: MaterialStateProperty.all<Color>(
-              Theme.of(context).primaryColor),
-          backgroundColor: MaterialStateProperty.all<Color>(
-              Theme.of(context).canvasColor),
+          foregroundColor:
+              MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
+          backgroundColor:
+              MaterialStateProperty.all<Color>(Theme.of(context).canvasColor),
           overlayColor: MaterialStateProperty.all<Color>(
               Theme.of(context).primaryColor.withOpacity(.3)),
-          shape:
-          MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)))),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))),
     );
   }
 }

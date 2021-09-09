@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:medpack/constants/pages.dart';
 import 'package:medpack/pages/home_page.dart';
 import 'package:medpack/utils/palete.dart';
 
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(MyApp());
 }
 
@@ -24,9 +26,14 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'MedPack',
         theme: ThemeData(
-          canvasColor: Color(0xfffefefe),//f3f3f3,
-          primarySwatch: Palette.materialColor(0xff141d2f),
-        ),
+            canvasColor: Color(0xfffefefe), //f3f3f3,
+            primarySwatch: Palette.materialColor(0xff141d2f),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all<double>(0),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)))))),
         home: HomePage(),
         getPages: pages,
         debugShowCheckedModeBanner: false,
@@ -82,9 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          color: Color(0xfff6fbfb)
-        ),
+        decoration: BoxDecoration(color: Color(0xfff6fbfb)),
         child: Center(
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.

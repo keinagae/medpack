@@ -1,0 +1,59 @@
+
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:medpack/constants/constants.dart';
+import 'package:medpack/constants/routes.dart';
+import 'package:medpack/data/providers/auth.dart';
+import 'package:medpack/utils/errors.dart';
+
+class LoginController extends GetxController {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> form = GlobalKey<FormState>();
+  late AuthProvider provider;
+  var errors = {}.obs;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    provider = AuthProvider(baseUrl: Constants.apiUrl);
+    Future.delayed(Duration.zero, () {
+      final box = GetStorage();
+      print(box.getKeys());
+      if (box.read("token") != null) {
+        Get.offNamed(AppRoutes.account);
+      }
+    });
+  }
+
+  void login() {
+    if (form.currentState!.validate()) {
+      provider
+          .login(
+              username: emailController.text, password: passwordController.text)
+          .then((value) {
+        Get.offNamed(AppRoutes.account);
+      }).catchError((exception) {
+        final error = exception as DioError;
+        print(exception);
+        if (error.response!=null&&error.response!.statusCode == 400) {
+          errors.clear();
+          errors.assignAll(
+              parseErrors(error.response!.data as Map<String, dynamic>));
+          print(errors);
+        }
+      });
+    }
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+}

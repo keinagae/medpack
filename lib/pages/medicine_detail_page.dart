@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:get/get.dart';
 import 'package:medpack/data/modals/medicine_tile.dart';
+import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/widgets/appbars.dart';
 import 'package:medpack/widgets/buttons.dart';
 import 'package:medpack/widgets/hero.dart';
@@ -13,7 +14,7 @@ class MedicineDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final medicine =
-        (Get.arguments as Map<String, dynamic>)['medicine'] as MedicineTile;
+        (Get.arguments as Map<String, dynamic>)['medicine'] as Product;
     return Scaffold(
       body: Container(
         color: Theme.of(context).primaryColor,
@@ -84,7 +85,7 @@ class MedicineDetailPage extends StatelessWidget {
                                 MDPHero(
                                   tag: "medicine_title_${medicine.id}",
                                   child: Text(
-                                    medicine.title ?? "",
+                                    medicine.name ?? "",
                                     style:
                                         Theme.of(context).textTheme.headline4,
                                   ),
@@ -94,6 +95,7 @@ class MedicineDetailPage extends StatelessWidget {
                                 ),
                                 Column(
                                   mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       children: [
@@ -146,7 +148,9 @@ class MedicineDetailPage extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
-                  AmountInput( onChanged: (value){},),
+                  AmountInput(
+                    onChanged: (value) {},
+                  ),
                   SizedBox(
                     width: 20,
                   ),
