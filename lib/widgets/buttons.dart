@@ -25,6 +25,34 @@ class MDPBackButton extends StatelessWidget {
   }
 }
 
+class IconTextButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final Icon icon;
+  final Widget text;
+  IconTextButton(
+      {Key? key,
+      required this.text,
+      required this.icon,
+      required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+        onPressed: onPressed,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            icon,
+            SizedBox(
+              width: 10,
+            ),
+            text
+          ],
+        ));
+  }
+}
+
 class RectIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPressed;

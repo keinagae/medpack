@@ -21,4 +21,9 @@ class ProductsController extends GetxController {
       }
     });
   }
+
+  void addProduct(Product product) {
+    products.add(product);
+    products.refresh();
+  }
 }

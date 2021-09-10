@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:medpack/data/modals/cart.dart';
+import 'package:medpack/utils/s_response.dart';
 
 class CartProvider {
   late Dio httpClient;
@@ -18,9 +19,33 @@ class CartProvider {
     ));
   }
 
-  Future<Cart> cart() async {
-    final response = await httpClient.get("cart/");
-    Cart cart = Cart.fromJson(response.data);
-    return cart;
+  Future<SResponse<Cart>> cart() async {
+    try {
+      final response = await httpClient.get("cart/");
+      return SResponse.fromResponse(
+          response: response,
+          responseParser: (response) => Cart.fromJson(response.data));
+    } catch (exception) {
+      final response = SResponse<Cart>.fromError(exception);
+      print(response.inputErrors);
+      print(response.hasError);
+      print(response.errorMsg);
+      return response;
+    }
+  }
+
+  Future<SResponse<CartItem>> addToCart({int? productId, int? quantity}) async {
+    Map<String, dynamic> data = {
+      "product_id": productId,
+      "quantity": quantity,
+    };
+    try {
+      final response = await httpClient.post("cart/add", data: data);
+      return SResponse.fromResponse(
+          response: response,
+          responseParser: (date) => CartItem.fromJson(date));
+    } catch (exception) {
+      return SResponse.fromError(exception);
+    }
   }
 }

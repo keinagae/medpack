@@ -27,19 +27,20 @@ class SResponse<T> {
   }
 
   SResponse.fromError(dynamic exception) {
+    print(exception);
     final error = exception as DioError;
     hasError = true;
     success = false;
 
-    if (error.response!.statusCode == 400) {
+    if (error.response?.statusCode == 400) {
       inputError = true;
       serverError = false;
       parseErrors(error.response!.data);
-    } else if (error.response!.statusCode == 401) {
+    } else if (error.response?.statusCode == 401) {
       inputError = false;
       serverError = false;
       unAuthenticatedError = true;
-    } else if (error.response!.statusCode == 500) {
+    } else if (error.response?.statusCode == 500) {
       inputError = false;
       serverError = true;
       unAuthenticatedError = false;

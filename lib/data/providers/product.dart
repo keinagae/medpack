@@ -20,14 +20,16 @@ class ProductProvider {
     ));
   }
 
-  Future<Product> create(Map<String, dynamic> data) async {
+  Future<SResponse<Product>> create(Map<String, dynamic> data) async {
     var formData = FormData.fromMap(
         {...data, 'image': await MultipartFile.fromFile(data['image'])});
-    final response = await httpClient.post("products/my/", data: formData);
-    // if (response.statusCode == 200) {
-    return Product.fromJson(response.data);
-    // }
-    // re
+    try {
+      final response = await httpClient.post("products/my/", data: formData);
+      return SResponse.fromResponse(
+          response: response, responseParser: (data) => Product.fromJson(data));
+    } catch (exception) {
+      return SResponse.fromError(exception);
+    }
   }
 
   Future<SResponse<List<Product>>> list() async {

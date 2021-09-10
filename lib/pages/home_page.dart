@@ -11,6 +11,7 @@ import 'package:medpack/controllers/products_controller.dart';
 import 'package:medpack/data/modals/medicine_tile.dart';
 import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/pages/medicine_detail_page.dart';
+import 'package:medpack/widgets/buttons.dart';
 import 'package:medpack/widgets/cards.dart';
 import 'package:medpack/widgets/hero.dart';
 
@@ -37,14 +38,13 @@ class HomePage extends StatelessWidget {
                     visualDensity: VisualDensity.compact,
                     padding: EdgeInsets.zero,
                   ),
-                  IconButton(
-                    onPressed: () {
-                      Get.toNamed(AppRoutes.bagPage);
-                    },
-                    icon: Icon(Entypo.bag),
-                    visualDensity: VisualDensity.compact,
-                    padding: EdgeInsets.zero,
-                  ),
+                  Obx(() => IconTextButton(
+                        onPressed: () {
+                          Get.toNamed(AppRoutes.bagPage);
+                        },
+                        icon: Icon(Entypo.bag),
+                        text: Text("${cartController.cartQuantity}"),
+                      ))
                 ],
               ),
             ),
@@ -182,7 +182,10 @@ class ProductListCard extends StatelessWidget {
           ),
         ),
         trailing: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            final cartController = Get.find<CartController>();
+            cartController.addToCart(product: product, quantity: 1);
+          },
           child: Icon(Entypo.bag),
         ),
       ),

@@ -55,7 +55,7 @@ class BagPackPage extends StatelessWidget {
                 return InkWell(
                   onTap: () {
                     Get.toNamed(AppRoutes.detail,
-                        arguments: {"medicine": item});
+                        arguments: {"medicine": item.product});
                   },
                   child: Container(
                     padding: EdgeInsets.all(20),
@@ -95,7 +95,7 @@ class BagPackPage extends StatelessWidget {
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: MDPHero(
-                                      tag: "medicine_image_${item.id}",
+                                      tag: "medicine_image_${item.product?.id}",
                                       child: Image.network(
                                         item.product?.image ?? "",
                                         fit: BoxFit.cover,
@@ -108,7 +108,7 @@ class BagPackPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   MDPHero(
-                                      tag: "medicine_title_${item.id}",
+                                      tag: "medicine_title_${item.product?.id}",
                                       child: Text(
                                         item.product?.name ?? "",
                                         style: Theme.of(context)
@@ -118,7 +118,7 @@ class BagPackPage extends StatelessWidget {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Text("Qty: 3")
+                                  Text("Qty: ${item.quantity}")
                                 ],
                               ),
                             ))

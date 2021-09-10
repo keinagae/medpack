@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:medpack/constants/routes.dart';
+import 'package:medpack/controllers/products_controller.dart';
+import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/data/providers/product.dart';
 import 'package:medpack/constants/constants.dart';
 
@@ -29,10 +31,15 @@ class AddProductController extends GetxController {
     if (form.currentState!.validate()) {
       form.currentState!.save();
       provider.create(date).then((value) {
-        Get.offNamed(AppRoutes.detail, arguments: {"medicine": value});
-      }).catchError((exception) {
-        var error = exception as DioError;
-        print(error.response!.data);
+        if (value.success) {
+          Get.find<ProductsController>().addProduct(value.data ?? Product());
+          Get.offNamed(AppRoutes.detail, arguments: {"medicine": value.data});
+        } else if (value.hasError) {
+          if (value.inputError) {
+            errors.clear();
+            errors.addAll(value.inputErrors);
+          }
+        }
       });
     }
   }
