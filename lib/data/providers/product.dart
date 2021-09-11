@@ -50,4 +50,23 @@ class ProductProvider {
       return errorResponse;
     }
   }
+
+  Future<SResponse<List<Product>>> myProducts() async {
+    try {
+      final response = await httpClient.get(
+        "products/my",
+      );
+      final successResponse = SResponse<List<Product>>.fromResponse(
+          response: response,
+          responseParser: (response) {
+            return (response.data as List<dynamic>)
+                .map((e) => Product.fromJson(e))
+                .toList();
+          });
+      return successResponse;
+    } catch (error) {
+      final errorResponse = SResponse<List<Product>>.fromError(error);
+      return errorResponse;
+    }
+  }
 }

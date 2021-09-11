@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/entypo_icons.dart';
 
-class AmountInput extends StatefulWidget {
+class AmountInput extends StatelessWidget {
   final int value;
   final Function(int) onChanged;
-  AmountInput({Key? key,this.value=1,required this.onChanged}) : super(key: key);
 
-  @override
-  _AmountInputState createState() => _AmountInputState();
-}
-
-class _AmountInputState extends State<AmountInput> {
-
-  late int value;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    value=widget.value;
-  }
+  AmountInput({Key? key, this.value = 1, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -40,25 +26,17 @@ class _AmountInputState extends State<AmountInput> {
                   Entypo.plus,
                 ),
                 onPressed: () {
-                  value++;
-                  widget.onChanged(value);
-                  setState(() {
-
-                  });
+                  onChanged(value + 1);
                 },
                 style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.zero),
-                    elevation:
-                    MaterialStateProperty.all<double>(0),
+                    padding:
+                        MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                    elevation: MaterialStateProperty.all<double>(0),
                     backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context)
-                            .canvasColor
-                            .withOpacity(1)),
+                        Theme.of(context).canvasColor.withOpacity(1)),
                     foregroundColor: MaterialStateProperty.all(
                         Theme.of(context).primaryColor),
-                    shape: MaterialStateProperty.all<
-                        RoundedRectangleBorder>(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)))),
               ),
@@ -74,10 +52,8 @@ class _AmountInputState extends State<AmountInput> {
                 onPressed: () {},
                 style: ButtonStyle(
                     padding:
-                    MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.zero),
-                    elevation:
-                    MaterialStateProperty.all<double>(0),
+                        MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                    elevation: MaterialStateProperty.all<double>(0),
                     foregroundColor: MaterialStateProperty.all(
                         Theme.of(context).primaryColor),
                     backgroundColor: MaterialStateProperty.all(
@@ -95,30 +71,98 @@ class _AmountInputState extends State<AmountInput> {
                   Entypo.minus,
                 ),
                 onPressed: () {
-                  if(value==1){
+                  if (value == 1) {
                     return;
                   }
-                  value--;
-                  widget.onChanged(value);
-                  setState(() {
-
-                  });
+                  onChanged(value - 1);
                 },
                 style: ButtonStyle(
                     padding:
-                    MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.zero),
-                    elevation:
-                    MaterialStateProperty.all<double>(0),
+                        MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                    elevation: MaterialStateProperty.all<double>(0),
                     foregroundColor: MaterialStateProperty.all(
                         Theme.of(context).primaryColor),
                     backgroundColor: MaterialStateProperty.all(
                         Theme.of(context).canvasColor),
-                    shape: MaterialStateProperty.all<
-                        RoundedRectangleBorder>(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(20)))),
+                            borderRadius: BorderRadius.circular(20)))),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AmountInputLight extends StatelessWidget {
+  final int value;
+  final Function(int) onChanged;
+
+  AmountInputLight({Key? key, this.value = 1, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          // color: Color(0xfff1f1f1)
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              height: 30,
+              width: 30,
+              child: ElevatedButton(
+                child: Icon(
+                  Entypo.plus,
+                ),
+                onPressed: () {
+                  onChanged(1);
+                },
+                style: ButtonStyle(
+                  padding:
+                      MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            SizedBox(
+              height: 30,
+              width: 30,
+              child: ElevatedButton(
+                child: Text("$value"),
+                onPressed: () {},
+                style: ButtonStyle(
+                  padding:
+                      MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            SizedBox(
+              height: 30,
+              width: 30,
+              child: ElevatedButton(
+                child: Icon(
+                  Entypo.minus,
+                ),
+                onPressed: () {
+                  if (value == -1) {
+                    return;
+                  }
+                  onChanged(-1);
+                },
+                style: ButtonStyle(
+                  padding:
+                      MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                ),
               ),
             )
           ],

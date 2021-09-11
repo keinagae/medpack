@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:get/get.dart';
-import 'package:medpack/controllers/product_detail_controller.dart';
-import 'package:medpack/data/modals/medicine_tile.dart';
 import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/widgets/appbars.dart';
-import 'package:medpack/widgets/buttons.dart';
 import 'package:medpack/widgets/hero.dart';
-import 'package:medpack/widgets/inputs/number_input.dart';
 
-class MedicineDetailPage extends StatelessWidget {
-  MedicineDetailPage({Key? key}) : super(key: key);
-
-  final controller = Get.put(ProductDetailController());
+class MYProductDetailPage extends StatelessWidget {
+  const MYProductDetailPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final product =
+        (Get.arguments as Map<String, dynamic>)['product'] as Product;
     return Scaffold(
       body: Container(
         color: Theme.of(context).primaryColor,
@@ -44,7 +40,7 @@ class MedicineDetailPage extends StatelessWidget {
                         right: 0,
                         height: MediaQuery.of(context).size.height * .50,
                         child: MDPHero(
-                          tag: "medicine_image_${controller.product.value.id}",
+                          tag: "medicine_image_${product.id}",
                           child: Container(
                             width: double.maxFinite,
                             child: ClipRRect(
@@ -52,7 +48,7 @@ class MedicineDetailPage extends StatelessWidget {
                                   bottomLeft: Radius.circular(30),
                                   bottomRight: Radius.circular(30)),
                               child: Image.network(
-                                controller.product.value.image ?? "",
+                                product.image ?? "",
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -84,10 +80,9 @@ class MedicineDetailPage extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 MDPHero(
-                                  tag:
-                                      "medicine_title_${controller.product.value.id}",
+                                  tag: "medicine_title_${product.id}",
                                   child: Text(
-                                    controller.product.value.name ?? "",
+                                    product.name ?? "",
                                     style:
                                         Theme.of(context).textTheme.headline4,
                                   ),
@@ -120,11 +115,9 @@ class MedicineDetailPage extends StatelessWidget {
                                       padding: const EdgeInsets.only(top: 10.0),
                                       child: MDPHero(
                                         tag:
-                                            "medicine_description_${controller.product.value.id}",
+                                            "medicine_description_${product.id}",
                                         child: Text(
-                                          controller
-                                                  .product.value.description ??
-                                              "",
+                                          product.description ?? "",
                                           style: Theme.of(context)
                                               .textTheme
                                               .subtitle1!
@@ -147,29 +140,30 @@ class MedicineDetailPage extends StatelessWidget {
             ),
             SizedBox(
               height: 65,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: SizedBox.expand(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Entypo.pencil),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text("Edit")
+                      ],
+                    ),
+                    style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).primaryColor),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).canvasColor),
+                        overlayColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).primaryColor.withOpacity(.1))),
                   ),
-                  Obx(() => AmountInput(
-                        value: controller.quantity,
-                        onChanged: (value) {
-                          controller.quantity = value;
-                        },
-                      )),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(child: DetailAddToCartButton(
-                    onPressed: () {
-                      controller.addQuantityToCart();
-                    },
-                  )),
-                  SizedBox(
-                    width: 20,
-                  )
-                ],
+                ),
               ),
             )
           ],

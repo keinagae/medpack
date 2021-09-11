@@ -1,3 +1,3 @@
 class Constants {
-  static String apiUrl = "https://bright-donkey-58.loca.lt/api/";
+  static String apiUrl = "https://friendly-insect-11.loca.lt/api/";
 }

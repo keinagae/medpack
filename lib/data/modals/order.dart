@@ -1,24 +1,24 @@
 import 'package:medpack/data/modals/product.dart';
 
-class Cart {
+class Order {
   String? status;
-  List<CartItem> items = [];
-  Cart({this.status, this.items = const []});
+  List<OrderItem> items = [];
+  Order({this.status, this.items = const []});
 
-  Cart.fromJson(dynamic json) {
+  Order.fromJson(dynamic json) {
     status = json['status'];
     items = (json['items'] as List<dynamic>)
-        .map((e) => CartItem.fromJson(e))
+        .map((e) => OrderItem.fromJson(e))
         .toList();
   }
 }
 
-class CartItem {
+class OrderItem {
   int? id;
   Product? product;
   int? quantity;
-  CartItem({this.id, this.product, this.quantity});
-  CartItem.fromJson(dynamic json) {
+  OrderItem({this.id, this.product, this.quantity});
+  OrderItem.fromJson(dynamic json) {
     id = json['id'];
     product = Product.fromJson(json['product']);
     quantity = json['quantity'];

@@ -72,12 +72,14 @@ class RectIconButton extends StatelessWidget {
 }
 
 class DetailAddToCartButton extends StatelessWidget {
-  const DetailAddToCartButton({Key? key}) : super(key: key);
+  final VoidCallback onPressed;
+  const DetailAddToCartButton({Key? key, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

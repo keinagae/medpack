@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:medpack/constants/routes.dart';
 import 'package:medpack/middleware/login_required.dart';
+import 'package:medpack/pages/account/my_product_detail_page.dart';
+import 'package:medpack/pages/account/my_products_page.dart';
 import 'package:medpack/pages/account_page.dart';
 import 'package:medpack/pages/add_product_page.dart';
 import 'package:medpack/pages/bagpack_page.dart';
@@ -18,6 +20,18 @@ List<GetPage> pages = [
       name: AppRoutes.account,
       page: () {
         return AccountPage();
+      },
+      middlewares: [LoginRequiredMiddleWare()]),
+  GetPage(
+      name: AppRoutes.myProducts,
+      page: () {
+        return MyProductsPage();
+      },
+      middlewares: [LoginRequiredMiddleWare()]),
+  GetPage(
+      name: AppRoutes.myProductsDetail,
+      page: () {
+        return MYProductDetailPage();
       },
       middlewares: [LoginRequiredMiddleWare()]),
   GetPage(

@@ -43,7 +43,7 @@ class CartProvider {
       final response = await httpClient.post("cart/add", data: data);
       return SResponse.fromResponse(
           response: response,
-          responseParser: (date) => CartItem.fromJson(date));
+          responseParser: (date) => CartItem.fromJson(date.data));
     } catch (exception) {
       return SResponse.fromError(exception);
     }

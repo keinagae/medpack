@@ -12,22 +12,26 @@ class AccountPage extends StatelessWidget {
       body: Text("Account"),
       bottomNavigationBar: Row(
         children: [
-          IconButton(onPressed: (){
-            GetStorage().erase().then((value){
-              Get.offNamed(AppRoutes.login);
-            });
-
-          }, icon: Icon(Icons.logout)),
-          TextButton(onPressed: (){
-            Get.offNamed(AppRoutes.addProduct);
-
-          }, child:Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.add),
-              Text("Product")
-            ],
-          ))
+          IconButton(
+              onPressed: () {
+                GetStorage().erase().then((value) {
+                  Get.toNamed(AppRoutes.login);
+                });
+              },
+              icon: Icon(Icons.logout)),
+          TextButton(
+              onPressed: () {
+                Get.toNamed(AppRoutes.myProducts);
+              },
+              child: Text("Products")),
+          TextButton(
+              onPressed: () {
+                Get.toNamed(AppRoutes.addProduct);
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [Icon(Icons.add), Text("Product")],
+              ))
         ],
       ),
     );
