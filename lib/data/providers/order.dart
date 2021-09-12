@@ -19,6 +19,21 @@ class OrderProvider {
     ));
   }
 
+  Future<SResponse<List<Order>>> getOrders() async {
+    try {
+      final response = await httpClient.get("order/");
+      return SResponse.fromResponse(
+          response: response,
+          responseParser: (response) {
+            return (response.data as List<dynamic>)
+                .map((e) => Order.fromJson(e))
+                .toList();
+          });
+    } catch (exception) {
+      return SResponse<List<Order>>.fromError(exception);
+    }
+  }
+
   Future<SResponse<Order>> placeOrder() async {
     try {
       final response = await httpClient.post("order/add");

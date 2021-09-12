@@ -183,6 +183,10 @@ class ProductListCard extends StatelessWidget {
         ),
         trailing: TextButton(
           onPressed: () {
+            if (product.quantity == 0) {
+              Get.snackbar("Insufficient Quantity", "Not enough quantity");
+              return;
+            }
             final cartController = Get.find<CartController>();
             cartController.addToCart(product: product, quantity: 1);
           },

@@ -163,6 +163,12 @@ class MedicineDetailPage extends StatelessWidget {
                   ),
                   Expanded(child: DetailAddToCartButton(
                     onPressed: () {
+                      if (controller.quantity >
+                          controller.product.value.quantity) {
+                        Get.snackbar(
+                            "Insufficient Quantity", "Not enough quantity");
+                        return;
+                      }
                       controller.addQuantityToCart();
                     },
                   )),

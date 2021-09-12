@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:medpack/constants/routes.dart';
 import 'package:medpack/middleware/login_required.dart';
+import 'package:medpack/pages/account/my_orders_page.dart';
 import 'package:medpack/pages/account/my_product_detail_page.dart';
 import 'package:medpack/pages/account/my_products_page.dart';
 import 'package:medpack/pages/account_page.dart';
@@ -37,5 +38,9 @@ List<GetPage> pages = [
   GetPage(
       name: AppRoutes.addProduct,
       page: () => AddProductPage(),
+      middlewares: [LoginRequiredMiddleWare()]),
+  GetPage(
+      name: AppRoutes.orders,
+      page: () => MyOrderPage(),
       middlewares: [LoginRequiredMiddleWare()])
 ];

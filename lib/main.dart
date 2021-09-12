@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:medpack/constants/pages.dart';
 import 'package:medpack/pages/home_page.dart';
+import 'package:medpack/services/auth_service.dart';
 import 'package:medpack/utils/palete.dart';
 
 void main() async {
@@ -24,9 +25,13 @@ class MyApp extends StatelessWidget {
         }
       },
       child: GetMaterialApp(
+        initialBinding: BindingsBuilder(() {
+          Get.put(AuthService());
+        }),
         title: 'MedPack',
         theme: ThemeData(
-            canvasColor: Color(0xfffefefe), //f3f3f3,
+            canvasColor: Color(0xffffffff),
+            backgroundColor: Color(0xffffffff), //f3f3f3, fefefe
             primarySwatch: Palette.materialColor(0xff141d2f),
             elevatedButtonTheme: ElevatedButtonThemeData(
                 style: ButtonStyle(

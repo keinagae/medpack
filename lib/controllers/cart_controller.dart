@@ -35,7 +35,6 @@ class CartController extends GetxController {
     cart.value.items.forEach((element) {
       cartQuantity.value += element.quantity ?? 0;
     });
-    updateCartQuantity();
   }
 
   void addToCart({required Product product, required int quantity}) {
@@ -48,6 +47,7 @@ class CartController extends GetxController {
       var item = CartItem(quantity: quantity, product: product);
       cart.value.items.add(item);
     }
+    product.quantity = product.quantity - quantity;
     updateCartQuantity();
     cart.refresh();
     provider
@@ -60,15 +60,10 @@ class CartController extends GetxController {
           var item = cart.value.items[index];
           item.id = response.data?.id;
         }
-        Get.showSnackbar(GetBar(
-          message: "cart Updated",
-          duration: Duration(milliseconds: 1000),
-        ));
+        Get.snackbar("Bag Updated", "Item added to Bag");
       } else {
-        Get.showSnackbar(GetBar(
-          message: "Unable to update cart",
-          duration: Duration(milliseconds: 1000),
-        ));
+        product.quantity = product.quantity + quantity;
+        Get.snackbar("Bag Update Failed", "Unable to add item in bag");
         fetchCart();
       }
     });
@@ -83,6 +78,7 @@ class CartController extends GetxController {
       print("deleteing item");
       cart.value.items.remove(item);
     }
+    item.product?.quantity = item.product!.quantity - quantity;
     // cart.update((value) {
     //   print("updating");
     //   value!.items = [...value.items];
@@ -94,16 +90,11 @@ class CartController extends GetxController {
         .addToCart(productId: item.product?.id, quantity: quantity)
         .then((response) {
       if (response.hasError) {
-        Get.showSnackbar(GetBar(
-          message: "Unable to update cart",
-          duration: Duration(milliseconds: 1000),
-        ));
+        item.product?.quantity = item.product!.quantity - quantity;
+        Get.snackbar("Bag Update Failed", "Unable to add item in bag");
         fetchCart();
       } else {
-        Get.showSnackbar(GetBar(
-          message: "Cart updated",
-          duration: Duration(milliseconds: 1000),
-        ));
+        Get.snackbar("Bag Updated", "");
       }
     });
   }
@@ -113,16 +104,10 @@ class CartController extends GetxController {
     provider.placeOrder().then((response) {
       if (response.success) {
         fetchCart();
-        Get.showSnackbar(GetBar(
-          message: "Reuest placed",
-          duration: Duration(milliseconds: 1000),
-        ));
+        Get.snackbar("Request Placed", "Successfully placed request");
       } else {
         fetchCart();
-        Get.showSnackbar(GetBar(
-          message: "un able to place request",
-          duration: Duration(milliseconds: 1000),
-        ));
+        Get.snackbar("Request failed", "unable to place request");
       }
     });
   }

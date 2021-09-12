@@ -6,6 +6,7 @@ class AppRoutes {
   static String account = "/account";
   static String addProduct = "/product/add";
   static String myProducts = "/my/products";
+  static String orders = "/orders";
   static String myProductsDetail = "/my/products/detail";
   static String home = "/";
 }

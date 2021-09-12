@@ -36,7 +36,7 @@ class MyProductsPage extends StatelessWidget {
                           product: controller.products[index]);
                     },
                     separatorBuilder: (ctx, index) => SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                     itemCount: controller.products.length)))
           ],

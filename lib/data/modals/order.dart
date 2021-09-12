@@ -1,15 +1,21 @@
 import 'package:medpack/data/modals/product.dart';
 
 class Order {
+  int? id;
   String? status;
+  late DateTime createdAt;
   List<OrderItem> items = [];
-  Order({this.status, this.items = const []});
+  Order({this.status, this.id, this.items = const [], DateTime? createdAt}) {
+    this.createdAt = createdAt ?? DateTime.now();
+  }
 
   Order.fromJson(dynamic json) {
+    id = json['id'];
     status = json['status'];
     items = (json['items'] as List<dynamic>)
         .map((e) => OrderItem.fromJson(e))
         .toList();
+    createdAt = DateTime.parse(json['created_at']);
   }
 }
 
