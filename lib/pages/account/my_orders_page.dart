@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:medpack/constants/constants.dart';
 import 'package:medpack/controllers/order_controller.dart';
 import 'package:medpack/data/modals/order.dart';
+import 'package:medpack/widgets/animations/base.dart';
 import 'package:medpack/widgets/appbars.dart';
 import 'package:medpack/widgets/cards.dart';
 import 'package:medpack/widgets/chip.dart';
@@ -32,15 +33,21 @@ class MyOrderPage extends StatelessWidget {
             Expanded(
                 child: RefreshIndicator(
               onRefresh: controller.fetchOrders,
-              child: Obx(() => ListView.separated(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  itemBuilder: (ctx, index) {
-                    return MyOrderCard(order: controller.orders[index]);
-                  },
-                  separatorBuilder: (ctx, index) => SizedBox(
-                        height: 5,
-                      ),
-                  itemCount: controller.orders.length)),
+              child: Obx(() => FetchAnimation(
+                  isEmpty: controller.orders.isEmpty,
+                  isLoading: controller.loading.value,
+                  emptyMsg: "No requests made yet",
+                  loadingMsg: "Getting your requests",
+                  child: ListView.separated(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      itemBuilder: (ctx, index) {
+                        return MyOrderCard(order: controller.orders[index]);
+                      },
+                      separatorBuilder: (ctx, index) => SizedBox(
+                            height: 5,
+                          ),
+                      itemCount: controller.orders.length))),
             ))
           ],
         ),

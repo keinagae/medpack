@@ -13,15 +13,25 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>{
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
 
-
+  void toLogin() {
+    tabController.animateTo(0);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: KeyboardVisibilityBuilder(
-        builder: (ctx,keyboardVisibility){
+        builder: (ctx, keyboardVisibility) {
           return DefaultTabController(
             length: 2,
             child: Column(
@@ -29,32 +39,29 @@ class _LoginPageState extends State<LoginPage>{
               children: [
                 SafeArea(
                   child: Container(
-                    height: keyboardVisibility?null:300,
+                    height: keyboardVisibility ? null : 300,
                     decoration: BoxDecoration(
                         color: Color(0xfff7f7f7),
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(40),
-                            bottomRight: Radius.circular(40)
-                        ),
+                            bottomRight: Radius.circular(40)),
                         boxShadow: [
                           BoxShadow(
                               color: Color.fromRGBO(17, 17, 26, .05),
-                              offset: Offset(0,4),
-                              blurRadius: 16
-                          ),
+                              offset: Offset(0, 4),
+                              blurRadius: 16),
                           BoxShadow(
                               color: Color.fromRGBO(17, 17, 26, .05),
-                              offset: Offset(0,8),
-                              blurRadius: 32
-                          )
-                        ]
-                    ) ,
+                              offset: Offset(0, 8),
+                              blurRadius: 32)
+                        ]),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 70),
                           child: TabBar(
+                            controller: tabController,
                             tabs: [
                               Tab(
                                 child: Text("Login"),
@@ -73,10 +80,10 @@ class _LoginPageState extends State<LoginPage>{
                 ),
                 Expanded(
                   child: TabBarView(
+                    controller: tabController,
                     children: [
-
                       LoginContainer(),
-                      SignupContainer(),
+                      SignupContainer(toLogin: toLogin),
                     ],
                   ),
                 )

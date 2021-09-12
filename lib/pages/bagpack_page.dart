@@ -5,6 +5,7 @@ import 'package:medpack/constants/routes.dart';
 import 'package:medpack/controllers/cart_controller.dart';
 import 'package:medpack/controllers/medicine_list_controller.dart';
 import 'package:medpack/data/modals/cart.dart';
+import 'package:medpack/widgets/animations/base.dart';
 import 'package:medpack/widgets/buttons.dart';
 import 'package:medpack/widgets/hero.dart';
 import 'package:medpack/widgets/inputs/number_input.dart';
@@ -51,18 +52,27 @@ class BagPackPage extends StatelessWidget {
                             offset: Offset(0, -4))
                       ]),
                   child: Obx(
-                    () => ListView.separated(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                      itemBuilder: (ctx, int index) {
-                        final item = controller.cart.value.items[index];
-                        return BackPackItemWidget(item: item);
-                      },
-                      itemCount: controller.cart.value.items.length,
-                      separatorBuilder: (ctx, int index) => SizedBox(
-                        height: 20,
-                      ),
-                    ),
+                    () {
+                      if (controller.cart.value.items.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 20),
+                          child: EmptyBagAnimation(),
+                        );
+                      }
+                      return ListView.separated(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        itemBuilder: (ctx, int index) {
+                          final item = controller.cart.value.items[index];
+                          return BackPackItemWidget(item: item);
+                        },
+                        itemCount: controller.cart.value.items.length,
+                        separatorBuilder: (ctx, int index) => SizedBox(
+                          height: 20,
+                        ),
+                      );
+                    },
                   ))),
           Container(
             height: 60,

@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:medpack/controllers/signup_controller.dart';
 
 class SignupContainer extends StatelessWidget {
-  SignupContainer({Key? key}) : super(key: key);
+  final Function toLogin;
+  SignupContainer({Key? key, required this.toLogin}) : super(key: key);
 
   final SignupController controller = Get.put(SignupController());
 
@@ -100,7 +101,7 @@ class SignupContainer extends StatelessWidget {
                     onPressed: controller.saving.value
                         ? null
                         : () {
-                            controller.signup();
+                            controller.signup(toLogin);
                           },
                     child: controller.saving.value
                         ? Text("Saving...")

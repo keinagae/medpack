@@ -12,6 +12,7 @@ import 'package:medpack/data/modals/medicine_tile.dart';
 import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/pages/medicine_detail_page.dart';
 import 'package:medpack/services/auth_service.dart';
+import 'package:medpack/widgets/animations/base.dart';
 import 'package:medpack/widgets/auth/login_required.dart';
 import 'package:medpack/widgets/buttons.dart';
 import 'package:medpack/widgets/cards.dart';
@@ -69,7 +70,7 @@ class HomePage extends StatelessWidget {
             MDPCard(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -108,12 +109,20 @@ class HomePage extends StatelessWidget {
                 flex: 1,
                 child: RefreshIndicator(
                   onRefresh: controller.fetchProducts,
-                  child: Obx(() => ListView.separated(
-                      itemBuilder: (ctx, index) => ProductListCard(
-                            product: controller.products[index],
-                          ),
-                      separatorBuilder: (ctx, index) => Container(),
-                      itemCount: controller.products.length)),
+                  child: Container(
+                    width: double.infinity,
+                    child: Obx(() => FetchAnimation(
+                        emptyMsg: "No medicines available",
+                        loadingMsg: "Fetching available medicines",
+                        isEmpty: controller.products.isEmpty,
+                        isLoading: controller.loading.value,
+                        child: ListView.separated(
+                            itemBuilder: (ctx, index) => ProductListCard(
+                                  product: controller.products[index],
+                                ),
+                            separatorBuilder: (ctx, index) => Container(),
+                            itemCount: controller.products.length))),
+                  ),
                 ))
           ],
         ),
@@ -141,13 +150,6 @@ class HomePage extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.all<Color>(
                       Theme.of(context).primaryColor.withOpacity(.2))),
             ),
-            TextButton(
-              onPressed: () {},
-              child: Icon(Entypo.list),
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).primaryColor.withOpacity(.2))),
-            )
           ],
         ),
       ),

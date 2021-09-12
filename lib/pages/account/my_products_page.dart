@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:medpack/constants/routes.dart';
 import 'package:medpack/controllers/my_products_controller.dart';
 import 'package:medpack/data/modals/product.dart';
+import 'package:medpack/widgets/animations/base.dart';
 import 'package:medpack/widgets/appbars.dart';
 import 'package:medpack/widgets/cards.dart';
 import 'package:medpack/widgets/hero.dart';
@@ -41,16 +42,21 @@ class MyProductsPage extends StatelessWidget {
             Expanded(
                 child: RefreshIndicator(
               onRefresh: controller.fetchProducts,
-              child: Obx(() => ListView.separated(
-                  itemBuilder: (ctx, index) {
-                    return MyProductListCard(
-                        product: controller.products[index]);
-                  },
-                  separatorBuilder: (ctx, index) => SizedBox(
-                        height: 5,
-                      ),
-                  itemCount: controller.products.length)),
-            ))
+              child: Obx(() => FetchAnimation(
+                  isLoading: controller.loading.value,
+                  isEmpty: controller.products.isEmpty,
+                  loadingMsg: "Fetching your products please wait...",
+                  emptyMsg: "No products available",
+                  child: ListView.separated(
+                      itemBuilder: (ctx, index) {
+                        return MyProductListCard(
+                            product: controller.products[index]);
+                      },
+                      separatorBuilder: (ctx, index) => SizedBox(
+                            height: 5,
+                          ),
+                      itemCount: controller.products.length))),
+            )),
           ],
         ),
       ),

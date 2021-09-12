@@ -21,7 +21,7 @@ class SignupController extends GetxController {
     provider = AuthProvider(baseUrl: Constants.apiUrl);
   }
 
-  void signup() {
+  void signup(Function toLogin) {
     if (form.currentState!.validate()) {
       saving.value = true;
       hasErrors.value = false;
@@ -29,6 +29,8 @@ class SignupController extends GetxController {
           .signup(
               username: emailController.text, password: passwordController.text)
           .then((value) {
+        toLogin();
+        Get.snackbar("Signed Up", "Please Login");
         saving.value = false;
         hasErrors.value = false;
       }).catchError((exception) {
