@@ -29,7 +29,7 @@ class UserProvider {
     }
   }
 
-  Future<dynamic> saveProfile(Map<String, dynamic> data) async {
+  Future<SResponse<User>> saveProfile(Map<String, dynamic> data) async {
     try {
       final response = await httpClient.patch("users/profile", data: data);
       final saveResponse = SResponse.fromResponse(
@@ -37,7 +37,7 @@ class UserProvider {
       final me = await this.me();
       return me;
     } catch (exception) {
-      return SResponse.fromError(exception);
+      return SResponse<User>.fromError(exception);
     }
   }
 }

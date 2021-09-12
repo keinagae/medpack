@@ -30,15 +30,18 @@ class MyOrderPage extends StatelessWidget {
               ),
             ),
             Expanded(
-                child: Obx(() => ListView.separated(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    itemBuilder: (ctx, index) {
-                      return MyOrderCard(order: controller.orders[index]);
-                    },
-                    separatorBuilder: (ctx, index) => SizedBox(
-                          height: 5,
-                        ),
-                    itemCount: controller.orders.length)))
+                child: RefreshIndicator(
+              onRefresh: controller.fetchOrders,
+              child: Obx(() => ListView.separated(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  itemBuilder: (ctx, index) {
+                    return MyOrderCard(order: controller.orders[index]);
+                  },
+                  separatorBuilder: (ctx, index) => SizedBox(
+                        height: 5,
+                      ),
+                  itemCount: controller.orders.length)),
+            ))
           ],
         ),
       ),

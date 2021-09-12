@@ -67,12 +67,16 @@ class BagPackPage extends StatelessWidget {
           Container(
             height: 60,
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: ElevatedButton(
-              onPressed: () {
-                controller.placeOrder();
-              },
-              child: Text("Submit Request"),
-            ),
+            child: Obx(() => ElevatedButton(
+                  onPressed: controller.saving.value
+                      ? null
+                      : () {
+                          controller.placeOrder();
+                        },
+                  child: controller.saving.value
+                      ? Text("Submitting request...")
+                      : Text("Submit Request"),
+                )),
           )
         ]),
       ),

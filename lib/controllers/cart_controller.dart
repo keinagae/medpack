@@ -5,29 +5,43 @@ import 'package:medpack/data/modals/cart.dart';
 import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/data/providers/cart.dart';
 import 'package:medpack/data/providers/order.dart';
+import 'package:medpack/services/auth_service.dart';
 
 class CartController extends GetxController {
   var cart = Cart().obs;
   var cartQuantity = 0.obs;
+
+  var saving = false.obs;
+  var hasErrors = false.obs;
+
   CartProvider provider = CartProvider(baseUrl: Constants.apiUrl);
+
+  static CartController currentCart() => Get.find<CartController>();
 
   @override
   void onInit() {
     super.onInit();
-    fetchCart();
+    if (AuthService.service().isLoggedIn.value) {
+      fetchCart();
+    }
   }
 
   void fetchCart() {
     provider.cart().then((response) {
       if (response.success) {
         if (response.data != null) {
+          cartQuantity.value = 0;
           cart.value = response.data ?? cart.value;
           cart.value.items.forEach((element) {
-            cartQuantity += element.quantity ?? 0;
+            cartQuantity.value += element.quantity ?? 0;
           });
         }
       }
     });
+  }
+
+  void clearCart() {
+    cart.value = Cart();
   }
 
   void updateCartQuantity() {
@@ -101,12 +115,18 @@ class CartController extends GetxController {
 
   void placeOrder() {
     final provider = OrderProvider(baseUrl: Constants.apiUrl);
+    saving.value = true;
+    hasErrors.value = false;
     provider.placeOrder().then((response) {
       if (response.success) {
+        saving.value = false;
+        hasErrors.value = false;
         fetchCart();
         Get.snackbar("Request Placed", "Successfully placed request");
       } else {
         fetchCart();
+        saving.value = false;
+        hasErrors.value = true;
         Get.snackbar("Request failed", "unable to place request");
       }
     });

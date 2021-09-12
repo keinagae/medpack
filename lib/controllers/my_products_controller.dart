@@ -6,6 +6,8 @@ import 'package:medpack/data/providers/product.dart';
 class MyProductsController extends GetxController {
   var products = [].obs;
   ProductProvider provider = ProductProvider(baseUrl: Constants.apiUrl);
+  Rx<bool> loading = false.obs;
+  Rx<bool> hasErrors = false.obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -13,12 +15,19 @@ class MyProductsController extends GetxController {
     fetchProducts();
   }
 
-  void fetchProducts() {
-    provider.myProducts().then((respopnse) {
+  Future<dynamic> fetchProducts() {
+    loading.value = true;
+    hasErrors.value = false;
+    return provider.myProducts().then((respopnse) {
       if (respopnse.success) {
         products.clear();
         products.addAll(respopnse.data ?? []);
         products.refresh();
+        loading.value = false;
+        hasErrors.value = false;
+      } else {
+        loading.value = false;
+        hasErrors.value = true;
       }
     });
   }

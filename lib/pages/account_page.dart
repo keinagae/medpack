@@ -19,46 +19,45 @@ class AccountPage extends StatelessWidget {
           children: [
             NestedAppWidget(),
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
-              child: Text(
-                "Hi, ${auth.user.value.username}",
-                style: Theme.of(context).textTheme.headline3,
-              ),
-            ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Obx(() {
+                  String name = "";
+                  final user = auth.user.value;
+                  if (user.name != null) {
+                    name = user.name ?? "";
+                  } else {
+                    name = user.email ?? "";
+                  }
+                  return Text(
+                    "Hi, ${name}",
+                    style: Theme.of(context).textTheme.headline3,
+                  );
+                })),
             Expanded(child: ProfileContainer()),
           ],
         ),
       ),
       bottomNavigationBar: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          IconButton(
-              onPressed: () {
-                GetStorage().erase().then((value) {
-                  Get.toNamed(AppRoutes.login);
-                });
-              },
-              icon: Icon(Icons.logout)),
-          TextButton(
+          ElevatedButton(
               onPressed: () {
                 Get.toNamed(AppRoutes.myProducts);
               },
-              child: Text("Products")),
-          TextButton(
-              onPressed: () {
-                Get.toNamed(AppRoutes.addProduct);
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [Icon(Icons.add), Text("Product")],
-              )),
-          TextButton(
+              child: Text("My Medicines")),
+          ElevatedButton(
               onPressed: () {
                 Get.toNamed(AppRoutes.orders);
               },
               child: Text("Orders")),
+          ElevatedButton(
+              onPressed: () {
+                AuthService.service().logout();
+              },
+              child: Text("Logout")),
         ],
       ),
     );

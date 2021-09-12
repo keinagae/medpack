@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:medpack/data/modals/product.dart';
@@ -26,17 +27,36 @@ class ProductProvider {
     try {
       final response = await httpClient.post("products/my/", data: formData);
       return SResponse.fromResponse(
-          response: response, responseParser: (data) => Product.fromJson(data));
+          response: response,
+          responseParser: (response) => Product.fromJson(response.data));
     } catch (exception) {
       return SResponse.fromError(exception);
     }
   }
 
-  Future<SResponse<List<Product>>> list() async {
+  Future<SResponse<Product>> update(int id, Map<String, dynamic> data) async {
+    FormData formData = FormData();
+    if (data['image'] == null) {
+      formData = FormData.fromMap({...data});
+    } else {
+      formData = FormData.fromMap(
+          {...data, 'image': await MultipartFile.fromFile(data['image'])});
+    }
     try {
-      final response = await httpClient.get(
-        "products/",
-      );
+      final response =
+          await httpClient.patch("products/my/${id}/", data: formData);
+      return SResponse.fromResponse(
+          response: response,
+          responseParser: (responce) => Product.fromJson(responce.data));
+    } catch (exception) {
+      return SResponse.fromError(exception);
+    }
+  }
+
+  Future<SResponse<List<Product>>> list({String search = ""}) async {
+    try {
+      final response = await httpClient
+          .get("products/", queryParameters: {'search': search});
       final successResponse = SResponse<List<Product>>.fromResponse(
           response: response,
           responseParser: (response) {

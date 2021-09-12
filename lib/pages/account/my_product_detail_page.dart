@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttericon/entypo_icons.dart';
 import 'package:get/get.dart';
+import 'package:medpack/constants/routes.dart';
 import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/widgets/appbars.dart';
 import 'package:medpack/widgets/hero.dart';
@@ -144,7 +145,10 @@ class MYProductDetailPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: SizedBox.expand(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.offNamed(AppRoutes.addProduct,
+                          arguments: {"product": product});
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -31,11 +31,10 @@ class SResponse<T> {
     final error = exception as DioError;
     hasError = true;
     success = false;
-
     if (error.response?.statusCode == 400) {
       inputError = true;
       serverError = false;
-      parseErrors(error.response!.data);
+      inputErrors = parseErrors(error.response!.data);
     } else if (error.response?.statusCode == 401) {
       inputError = false;
       serverError = false;

@@ -11,6 +11,8 @@ import 'package:medpack/controllers/products_controller.dart';
 import 'package:medpack/data/modals/medicine_tile.dart';
 import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/pages/medicine_detail_page.dart';
+import 'package:medpack/services/auth_service.dart';
+import 'package:medpack/widgets/auth/login_required.dart';
 import 'package:medpack/widgets/buttons.dart';
 import 'package:medpack/widgets/cards.dart';
 import 'package:medpack/widgets/hero.dart';
@@ -19,6 +21,7 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
   final controller = Get.put(ProductsController());
   final cartController = Get.put(CartController());
+  final auth = AuthService.service();
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +35,34 @@ class HomePage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Entypo.menu),
-                    visualDensity: VisualDensity.compact,
-                    padding: EdgeInsets.zero,
+                  OutlinedButton(
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.bagPage);
+                    },
+                    child: Obx(() {
+                      if (auth.isLoggedIn.value) {
+                        String name = "";
+                        final user = auth.user.value;
+                        if (user.name != null) {
+                          name = user.name ?? "";
+                        } else {
+                          name = user.email ?? "";
+                        }
+                        return Text("${name}");
+                      }
+                      return Text("Not Logged In");
+                    }),
                   ),
-                  Obx(() => IconTextButton(
-                        onPressed: () {
-                          Get.toNamed(AppRoutes.bagPage);
-                        },
-                        icon: Icon(Entypo.bag),
-                        text: Text("${cartController.cartQuantity}"),
-                      ))
+                  LoginRequiredWidget(
+                      icon: Entypo.bag,
+                      notify: true,
+                      child: Obx(() => IconTextButton(
+                            onPressed: () {
+                              Get.toNamed(AppRoutes.bagPage);
+                            },
+                            icon: Icon(Entypo.bag),
+                            text: Text("${cartController.cartQuantity}"),
+                          )))
                 ],
               ),
             ),
@@ -65,9 +83,13 @@ class HomePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: TextField(
+                      controller: controller.searchController,
+                      onChanged: (value) {
+                        controller.fetchProducts();
+                      },
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: Color(0xfff7f7f7),
                           // isCollapsed: true,
                           isDense: true,
                           hintText: "Search",
@@ -84,12 +106,15 @@ class HomePage extends StatelessWidget {
             ),
             Flexible(
                 flex: 1,
-                child: Obx(() => ListView.separated(
-                    itemBuilder: (ctx, index) => ProductListCard(
-                          product: controller.products[index],
-                        ),
-                    separatorBuilder: (ctx, index) => Container(),
-                    itemCount: controller.products.length)))
+                child: RefreshIndicator(
+                  onRefresh: controller.fetchProducts,
+                  child: Obx(() => ListView.separated(
+                      itemBuilder: (ctx, index) => ProductListCard(
+                            product: controller.products[index],
+                          ),
+                      separatorBuilder: (ctx, index) => Container(),
+                      itemCount: controller.products.length)),
+                ))
           ],
         ),
       ),
@@ -98,14 +123,16 @@ class HomePage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            TextButton(
-              onPressed: () {
-                Get.toNamed(AppRoutes.account);
-              },
-              child: Icon(Entypo.user),
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).primaryColor.withOpacity(.2))),
+            LoginRequiredWidget(
+              child: TextButton(
+                onPressed: () {
+                  Get.toNamed(AppRoutes.account);
+                },
+                child: Icon(Entypo.user),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).primaryColor.withOpacity(.2))),
+              ),
             ),
             TextButton(
               onPressed: () {},
@@ -181,16 +208,20 @@ class ProductListCard extends StatelessWidget {
             ),
           ),
         ),
-        trailing: TextButton(
-          onPressed: () {
-            if (product.quantity == 0) {
-              Get.snackbar("Insufficient Quantity", "Not enough quantity");
-              return;
-            }
-            final cartController = Get.find<CartController>();
-            cartController.addToCart(product: product, quantity: 1);
-          },
-          child: Icon(Entypo.bag),
+        trailing: LoginRequiredWidget(
+          notify: true,
+          icon: Entypo.bag,
+          child: TextButton(
+            onPressed: () {
+              if (product.quantity == 0) {
+                Get.snackbar("Insufficient Quantity", "Not enough quantity");
+                return;
+              }
+              final cartController = Get.find<CartController>();
+              cartController.addToCart(product: product, quantity: 1);
+            },
+            child: Icon(Entypo.bag),
+          ),
         ),
       ),
     );

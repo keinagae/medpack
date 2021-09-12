@@ -8,6 +8,7 @@ import 'package:medpack/utils/palete.dart';
 
 void main() async {
   await GetStorage.init();
+  Get.put(AuthService());
   runApp(MyApp());
 }
 
@@ -25,9 +26,6 @@ class MyApp extends StatelessWidget {
         }
       },
       child: GetMaterialApp(
-        initialBinding: BindingsBuilder(() {
-          Get.put(AuthService());
-        }),
         title: 'MedPack',
         theme: ThemeData(
             canvasColor: Color(0xffffffff),

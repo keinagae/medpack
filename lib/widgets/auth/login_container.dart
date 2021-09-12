@@ -70,17 +70,22 @@ class LoginContainer extends StatelessWidget {
             )),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  controller.login();
-                },
-                child: Text("Login"),
-                style: ButtonStyle(
-                    elevation: MaterialStateProperty.all<double>(0),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)))),
-              ),
+              child: Obx(() => ElevatedButton(
+                    onPressed: controller.loggining.value
+                        ? null
+                        : () {
+                            controller.login();
+                          },
+                    child: controller.loggining.value
+                        ? Text("Loggingin...")
+                        : Text("Login"),
+                    style: ButtonStyle(
+                        elevation: MaterialStateProperty.all<double>(0),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)))),
+                  )),
             )
           ],
         ),

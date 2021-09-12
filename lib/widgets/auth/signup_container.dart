@@ -96,17 +96,22 @@ class SignupContainer extends StatelessWidget {
             )),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  controller.signup();
-                },
-                child: Text("Signup"),
-                style: ButtonStyle(
-                    elevation: MaterialStateProperty.all<double>(0),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)))),
-              ),
+              child: Obx(() => ElevatedButton(
+                    onPressed: controller.saving.value
+                        ? null
+                        : () {
+                            controller.signup();
+                          },
+                    child: controller.saving.value
+                        ? Text("Saving...")
+                        : Text("Signup"),
+                    style: ButtonStyle(
+                        elevation: MaterialStateProperty.all<double>(0),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)))),
+                  )),
             )
           ],
         ),

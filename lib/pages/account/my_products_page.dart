@@ -18,7 +18,16 @@ class MyProductsPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            NestedAppWidget(),
+            NestedAppWidget(
+              rightButton: ElevatedButton(
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.addProduct);
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [Icon(Icons.add), Text("Medicine")],
+                  )),
+            ),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: 20,
@@ -30,15 +39,18 @@ class MyProductsPage extends StatelessWidget {
               ),
             ),
             Expanded(
-                child: Obx(() => ListView.separated(
-                    itemBuilder: (ctx, index) {
-                      return MyProductListCard(
-                          product: controller.products[index]);
-                    },
-                    separatorBuilder: (ctx, index) => SizedBox(
-                          height: 5,
-                        ),
-                    itemCount: controller.products.length)))
+                child: RefreshIndicator(
+              onRefresh: controller.fetchProducts,
+              child: Obx(() => ListView.separated(
+                  itemBuilder: (ctx, index) {
+                    return MyProductListCard(
+                        product: controller.products[index]);
+                  },
+                  separatorBuilder: (ctx, index) => SizedBox(
+                        height: 5,
+                      ),
+                  itemCount: controller.products.length)),
+            ))
           ],
         ),
       ),
@@ -101,7 +113,9 @@ class MyProductListCard extends StatelessWidget {
           ),
         ),
         trailing: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed(AppRoutes.addProduct, arguments: {"product": product});
+          },
           child: Icon(Entypo.pencil),
         ),
       ),

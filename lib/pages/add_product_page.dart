@@ -23,7 +23,9 @@ class AddProductPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 30, left: 20, bottom: 30),
                 child: Text(
-                  "Add Medicine",
+                  controller.instance == null
+                      ? "Add Medicine"
+                      : "Edit Medicine",
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ),
@@ -123,15 +125,44 @@ class AddProductPage extends StatelessWidget {
                         height: 10,
                       ),
                       Obx(() => TextFormField(
+                            keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Please add image";
+                                return "Please enter Quantity";
                               }
                               return null;
                             },
                             onSaved: (value) {
-                              controller.date['image'] =
-                                  controller.imageFile!.path;
+                              controller.date['quantity'] = value;
+                            },
+                            controller: controller.quantityController,
+                            decoration: InputDecoration(
+                              labelText: "Quantity *",
+                              errorText: controller.errors['quantity'],
+                              filled: true,
+                              fillColor: Color(0xfff7f7f7),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Obx(() => TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                if (controller.instance == null) {
+                                  return "Please add image";
+                                }
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              if (controller.imageFile != null) {
+                                controller.date['image'] =
+                                    controller.imageFile?.path;
+                              }
                             },
                             readOnly: true,
                             controller: controller.imageController,
@@ -191,13 +222,19 @@ class AddProductPage extends StatelessWidget {
               ),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    controller.save();
-                  },
-                  child: Text("Add Product"),
-                  style: ButtonStyle(),
-                ),
+                child: Obx(() => ElevatedButton(
+                      onPressed: controller.saving.value
+                          ? null
+                          : () {
+                              controller.save();
+                            },
+                      child: controller.saving.value
+                          ? Text("Saving...")
+                          : Text(controller.instance == null
+                              ? "Add Product"
+                              : "Update Product"),
+                      style: ButtonStyle(),
+                    )),
               )
             ],
           ),

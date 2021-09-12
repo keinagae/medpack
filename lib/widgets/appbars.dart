@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'buttons.dart';
 
 class NestedAppWidget extends StatelessWidget {
-  const NestedAppWidget({Key? key}) : super(key: key);
+  final Widget? rightButton;
+  NestedAppWidget({Key? key, this.rightButton}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +20,12 @@ class NestedAppWidget extends StatelessWidget {
       },
       child: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(
-              left: 20, right: 20, top: 10, bottom: 10),
+          padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
           width: MediaQuery.of(context).size.width,
           height: 70,
           child: Row(
-            children: [
-              MDPBackButton()
-            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [MDPBackButton(), rightButton ?? Container()],
           ),
         ),
       ),
