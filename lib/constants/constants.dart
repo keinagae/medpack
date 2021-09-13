@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  static String apiUrl = "https://med-hope.herokuapp.com/api/";
+  static String apiUrl = "https://honest-elephant-20.loca.lt/api/";
 }
 
 var ORDER_STATUSES = {
