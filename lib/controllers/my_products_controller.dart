@@ -31,4 +31,12 @@ class MyProductsController extends GetxController {
       }
     });
   }
+
+  void updateProduct(Product product) {
+    int index = products.indexWhere((element) => element.id == product.id);
+    if (index > -1) {
+      products[index] = product;
+      products.refresh();
+    }
+  }
 }

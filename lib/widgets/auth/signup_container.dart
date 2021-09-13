@@ -41,6 +41,7 @@ class SignupContainer extends StatelessWidget {
                     },
                     decoration: InputDecoration(
                         labelText: "Email",
+                        errorText: controller.errors['email'],
                         filled: true,
                         fillColor: Color(0xfff7f7f7),
                         border: OutlineInputBorder(
@@ -62,6 +63,7 @@ class SignupContainer extends StatelessWidget {
                     decoration: InputDecoration(
                         labelText: "Password",
                         filled: true,
+                        errorText: controller.errors['password'],
                         fillColor: Color(0xfff7f7f7),
                         border: OutlineInputBorder(
                             borderSide: BorderSide.none,

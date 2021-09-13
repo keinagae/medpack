@@ -33,6 +33,10 @@ class SignupController extends GetxController {
         Get.snackbar("Signed Up", "Please Login");
         saving.value = false;
         hasErrors.value = false;
+        errors.clear();
+        emailController.text = "";
+        passwordController.text = "";
+        rePasswordController.text = "";
       }).catchError((exception) {
         print(exception);
         final error = exception as DioError;

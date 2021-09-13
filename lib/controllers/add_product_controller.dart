@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:medpack/constants/routes.dart';
+import 'package:medpack/controllers/my_products_controller.dart';
 import 'package:medpack/controllers/products_controller.dart';
 import 'package:medpack/data/modals/product.dart';
 import 'package:medpack/data/providers/product.dart';
@@ -54,6 +55,7 @@ class AddProductController extends GetxController {
     provider.update(instance?.id ?? 0, date).then((value) {
       if (value.success) {
         Get.find<ProductsController>().updateProduct(value.data ?? Product());
+        Get.find<MyProductsController>().updateProduct(value.data ?? Product());
         saving.value = false;
         Get.offNamed(AppRoutes.detail, arguments: {"medicine": value.data});
       } else if (value.hasError) {
